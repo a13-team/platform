@@ -1,19 +1,24 @@
 <?php
 
-namespace  Orchid\Platform\Database\Seeders;
+namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use Orchid\Platform\Models\User;
 
 class UsersTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        factory(User::class, 10)->create();
+        $users = [
+            [
+                'id'             => 1,
+                'name'           => 'Admin',
+                'email'          => 'admin@admin.com',
+                'password'       => bcrypt('password'),
+                'remember_token' => null,
+            ],
+        ];
+
+        User::insert($users);
     }
 }
