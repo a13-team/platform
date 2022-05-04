@@ -1,19 +1,25 @@
 <?php
 
-namespace  Orchid\Platform\Database\Seeders;
+namespace Database\Seeders;
 
+use App\Models\Role;
 use Illuminate\Database\Seeder;
-use Orchid\Platform\Models\Role;
 
 class RolesTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        factory(Role::class, 5)->create();
+        $roles = [
+            [
+                'id'    => 1,
+                'title' => 'Admin',
+            ],
+            [
+                'id'    => 2,
+                'title' => 'User',
+            ],
+        ];
+
+        Role::insert($roles);
     }
 }

@@ -1,58 +1,42 @@
 <?php
 
-namespace Orchid\Platform\Database\Factories;
+namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Orchid\Platform\Models\User;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ */
 class UserFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = User::class;
-
-    /**
      * Define the model's default state.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function definition()
     {
-        $roles = [
-            'admin'  => [
-                'platform.index'                      => 1,
-                'platform.systems'                    => 1,
-                'platform.systems.index'              => 1,
-                'platform.systems.roles'              => 1,
-                'platform.systems.settings'           => 1,
-                'platform.systems.users'              => 1,
-                'platform.systems.comment'            => 1,
-                'platform.systems.attachment'         => 1,
-                'platform.systems.media'              => 1,
-            ],
-            'user'   => [
-                'platform.index'                       => 1,
-                'platform.systems'                     => 1,
-                'platform.systems.roles'               => 0,
-                'platform.systems.settings'            => 1,
-                'platform.systems.users'               => 0,
-                'platform.systems.menu'                => 0,
-                'platform.systems.attachment'          => 1,
-                'platform.systems.media'               => 1,
-            ],
-        ];
-
         return [
-            'name'           => $this->faker->firstName,
-            'email'          => $this->faker->unique()->safeEmail,
-            'password'       => Hash::make('password'),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'email_verified_at' => now(),
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
-            'permissions'    => $roles['admin'],
         ];
+    }
+
+    /**
+     * Indicate that the model's email address should be unverified.
+     *
+     * @return static
+     */
+    public function unverified()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'email_verified_at' => null,
+            ];
+        });
     }
 }

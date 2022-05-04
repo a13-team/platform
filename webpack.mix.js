@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require('laravel-mix')
 
 /*
  |--------------------------------------------------------------------------
@@ -11,49 +11,24 @@ const mix = require('laravel-mix');
  |
  */
 
-/* Orchid mix config start */
+mix.webpackConfig({
+  output: { chunkFilename: 'adminapp/js/chunks/[name].js?id=[chunkhash]' },
+  resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+      '@': __dirname + '/resources/adminapp/js',
+      '@pages': __dirname + '/resources/adminapp/js/pages',
+      '@components': __dirname + '/resources/adminapp/js/components',
+      '@cruds': __dirname + '/resources/adminapp/js/cruds'
+    }
+  }
+})
 
-if (!mix.inProduction()) {
-    mix
-        .webpackConfig({
-            devtool: 'source-map',
-        })
-        .sourceMaps();
-} else {
-    mix.options({
-        clearConsole: true,
-        terser: {
-            terserOptions: {
-                compress: {
-                    drop_console: true,
-                },
-            },
-        },
-    });
-}
-
+// Admin App
 mix
-    .sass('resources/sass/app.scss', 'css/orchid.css', {
-        implementation: require('node-sass'),
-    })
-    .options({
-        processCssUrls: false,
-    })
-    .js('resources/js/app.js', 'js/orchid.js')
-    .extract([
-        'stimulus', 'stimulus/webpack-helpers', 'turbo',
-        'jquery', 'popper.js', 'bootstrap',
-        'dropzone', 'select2', 'cropperjs', 'frappe-charts', 'inputmask',
-        'simplemde', 'axios', 'leaflet', 'codeflask', 'stimulus-flatpickr',
-        'flatpickr', 'quill', 'codemirror', 'typo-js', 'sortablejs',
-    ])
-    .autoload({
-        jquery: [
-            '$', 'window.jQuery', 'jQuery', 'jquery',
-            'bootstrap', 'select2',
-        ],
-    })
-    .setPublicPath('public')
-    .version();
+  .js('resources/adminapp/js/app.js', 'public/adminapp/js')
+  .sass('resources/adminapp/sass/app.scss', 'public/adminapp/css')
 
-/* Orchid mix config end */
+if (mix.inProduction()) {
+  mix.version()
+}
